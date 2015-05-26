@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0,
+            user-scalable=no, target-densitydpi=device-dpi"/>
+
+    <script src="js/util/utils.js"></script>
+
+    <script src="js/input/EventEmitter.js"></script>
+    <script src="js/input/InputHandlerBase.js"></script>
+    <script src="js/input/MouseInputHandler.js"></script>
+    <script src="js/input/TouchInputHandler.js"></script>
+
+    <script src="Point.js"></script>
+    <script src="Direction.js"></script>
+    <script src="Hexagon.js"></script>
+    <script src="HexagonTreeNode.js"></script>
+    <script src="RenderProxy.js"></script>
+    <script src="BGGridManager.js"></script>
+    <script src="LayerManager.js"></script>
+    <script src="UserInterface.js"></script>
+    <script src="Game.js"></script>
+
+    <style>
+        html,body{
+            overflow: hidden;
+            width:100%;
+            height:100%;
+            margin:0;
+            border:0;
+        }
+    </style>
+    <script>
+//        function repaint(){
+//            if(!ctx){
+//                return;
+//            }
+//            //清除背景
+//            ctx.fillStyle="yellow";
+//            ctx.fillRect(0,0,canvas.width,canvas.height);
+//
+//            reorient();
+//            ctx.fillStyle = "darkgreen";
+//            ctx.fillRect(10,10,250,30);
+//
+//
+//        }
+//        function reorient(){
+//            var angle = window.orientation;
+//            if(angle){
+//                var rot = -Math.PI*(angle/180);
+//                ctx.translate(angle == -90?canvas.width:0,angle==90?canvas.height:0);
+//                ctx.rotate(rot);
+//            }
+//        }
+    </script>
+    <title>html5_lesson1</title>
+</head>
+<body>
+    <canvas id="mainCanvas" width="1000" height="1000"></canvas>
+</body>
+</html>
