@@ -9,6 +9,8 @@ BGGridManager.self = this;
 //默认3行4列的矩阵
 BGGridManager.row_count = 3;
 BGGridManager.column_count = 4;
+BGGridManager.xoffset = 0;
+BGGridManager.yoffset = 0;
 BGGridManager.strokeStyle = 'rgba(233,233,233,0.5)';
 
 BGGridManager.paintItem = function(itemindex,strokeStyle,length){
@@ -19,7 +21,7 @@ BGGridManager.paintItem = function(itemindex,strokeStyle,length){
     }
 }
 
-BGGridManager.paint = function(bggridObj,row_max,column_max,length) {
+BGGridManager.paint = function(bggridObj,row_max,column_max,length,xoffset,yoffset) {
     var isDataChanged = false;
     if(bggridObj){
         BGGridManager.data = bggridObj;
@@ -28,6 +30,8 @@ BGGridManager.paint = function(bggridObj,row_max,column_max,length) {
         isDataChanged = false;
     }
     var draw_length = length || RenderProxy._maplength;
+    BGGridManager.xoffset = xoffset || BGGridManager.xoffset;
+    BGGridManager.yoffset = yoffset || BGGridManager.yoffset;
     BGGridManager.row_count = row_max || BGGridManager.row_count;
     BGGridManager.column_count = column_max || BGGridManager.column_count;
 
@@ -36,7 +40,7 @@ BGGridManager.paint = function(bggridObj,row_max,column_max,length) {
         var index = 2;
         for (var column = 0; column < BGGridManager.column_count; column++) {
             if(column == 0){
-                RenderProxy.strokeMapInit(BGGridManager.strokeStyle, ctx, 0, 0, row * draw_length * Math.tan(Math.PI/3), draw_length);
+                RenderProxy.strokeMapInit(BGGridManager.strokeStyle, ctx, 0, BGGridManager.xoffset, row * draw_length * Math.tan(Math.PI/3) + BGGridManager.yoffset, draw_length);
             }else{
                 index = 3 - index;
                 RenderProxy.growStroke(BGGridManager.strokeStyle,ctx,index);

@@ -14,16 +14,19 @@ UserInterface.obtainUp = function(e){
 }
 
 UserInterface.obtainDown = function(e){
-    var imagedata = mask_ctx.getImageData(e.x, e.y, 1, 1);
-    var index = (imagedata.data[0]<<16 | imagedata.data[1]<<8 | imagedata.data[2]) - 1;
-    var obj = indexTransfer(index,BGGridManager.column_count);
-    var neighbors = BGGridManager.neighborGridIndexes(obj[0],obj[1]);
-    neighbors.forEach(function(x){
-        if(x){
-            var index = indexTransfer(x[0],x[1],BGGridManager.column_count);
-            BGGridManager.paintItem(index,'rgb(132,0,46)');
-        }
-    });
+    //var imagedata = mask_ctx.getImageData(e.x, e.y, 1, 1);
+    //var index = (imagedata.data[0]<<16 | imagedata.data[1]<<8 | imagedata.data[2]) - 1;
+    //var obj = indexTransfer(index,BGGridManager.column_count);
+    //var neighbors = BGGridManager.neighborGridIndexes(obj[0],obj[1]);
+    //neighbors.forEach(function(x){
+    //    if(x){
+    //        var index = indexTransfer(x[0],x[1],BGGridManager.column_count);
+    //        BGGridManager.paintItem(index,'rgb(132,0,46)');
+    //    }
+    //});
+    //改变网格大小
+    RenderProxy._maplength -= 3;
+
     //1.判断点击元素是否可以触发轮转
     //轮转元素_使周围六个元素按照顺时针旋转
     //单位元素 触发UI界面 使用技能

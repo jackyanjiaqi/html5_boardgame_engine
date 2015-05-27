@@ -10,7 +10,6 @@ var layerManager = new LayerManager();
 var _maplength = 70;
 //记录用于生长的grow点坐标
 var bggridObj;
-var debug = false;
 var grid_xi,grid_yi;
 
 window.onload = init;
@@ -24,7 +23,12 @@ function init(){
     //游戏循环
     gameLoop();
 }
-
+function initFullScreenCanvas(canvas){
+    resizeCanvas(canvas);
+    window.addEventListener("resize",function(){
+        resizeCanvas(canvas);
+    });
+}
 function resizeCanvas(canvas){
     dlog('resizeCanvas');
     canvas.width = document.width || document.body.clientWidth;
@@ -37,21 +41,44 @@ function resizeCanvas(canvas){
     mask_ctx = mask_canvas.getContext('2d');
     mask_ctx.clearRect(0,0,mask_canvas.width,mask_canvas.height);
 
-    grid_xi = Math.ceil(canvas.width/(_maplength*Math.tan(Math.PI/3)));
-    grid_yi = Math.ceil(canvas.height/(_maplength*Math.tan(Math.PI/3)));
-    //initGame(grid_xi,grid_yi);
-    img = document.createElement('IMG');
-    img.onload = function() {
-        initGame(grid_xi,grid_yi);
+    //grid_xi = Math.ceil(canvas.width/(_maplength*Math.tan(Math.PI/3)));
+    //grid_yi = Math.ceil(canvas.height/(_maplength*Math.tan(Math.PI/3)));
+    //img = document.createElement('IMG');
+    //img.onload = function() {
+    //    initGame(grid_xi,grid_yi);
+    //}
+    //img.src='img/grass_land.jpg';
+
+    createRandomIndicators();
+}
+
+function createRandomIndicators(){
+    var mainTest = new Indicator(function(e){
+        ctx.fillStyle = 'rgb(255,0,0)';
+        ctx.fillRect(e.rawX,e.rawY,400,400);
+    });
+    dlog(mainTest.toString());
+    for(var i = 0;i<4;i++){
+        var child = new Indicator(function(e){
+            ctx.fillStyle = 'rgb(0,0,255)';
+            ctx.fillRect(e.rawX,e.rawY,40,140);
+        },15,15);
+        child.x = i*60 + 20;
+        child.y = 20;
+        mainTest.addChild(child);
+        dlog(child.toString());
     }
-    img.src='img/grass_land.jpg';
+    IndicatorManager.setCanvas(canvas).addIndicator(mainTest);
 }
 
 function initGame(){
     dlog('initGame');
     bggridObj = [];
     BGGridManager.paint(bggridObj,arguments[1],arguments[0],_maplength);
-
+    createRandomIndicators();
+    //BGGridManager.xoffset = Math.round(canvas.width/2) - bggridObj.cx;
+    //BGGridManager.yoffset = Math.round(canvas.height/2) - bggridObj.cy;
+    //BGGridManager.paint();
     //var x = Math.ceil(bggridObj.length/2)-3;
     //var y = Math.ceil(bggridObj[0].length/2)+1;
     //
@@ -78,39 +105,60 @@ function initGame(){
     //)
 }
 
-function initFullScreenCanvas(canvas){
-    resizeCanvas(canvas);
-    window.addEventListener("resize",function(){
-        resizeCanvas(canvas);
-    });
-}
+
+var isMouseDown = false;
+var init_x = 0;
+var init_y = 0;
 
 function gameLoop(){
     canvas.addEventListener('mousemove',function(e){
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        BGGridManager.paint();
-        UserInterface.obtainMove(e);
-        //paintBGGrid(grid_xi,grid_yi,null);
-        //layerManager.repaint();
-        //paintLayer1();
-        //paintLayerMouse(e);
-//                repaintGamerViewCenter(canvas.width/2,canvas.height/2);
-//                repaintGamerViewCenter(e.pageX, e.pageY);
+        var indicator = IndicatorManager.indicators[0];
+        indicator.x = e.x;
+        indicator.y = e.y;
+        bgClear();
+        indicator.paint();
+        //if(isMouseDown){
+        //    moveBG(e.x - init_x,e.y - init_y);
+        //    bgClear();
+        //    initGame();
+        //}else{
+        //    bgClear();
+        //    BGGridManager.paint();
+        //    UserInterface.obtainMove(e);
+        //}
     });
     canvas.addEventListener('mousedown',function (e){
-        UserInterface.obtainDown(e);
+        isMouseDown = true;
+        init_x = e.x;
+        init_y = e.y;
+        UserInterface.obtainUp()
     });
+
     canvas.addEventListener('mouseup',function (e){
-        //ctx.clearRect(0,0,canvas.width,canvas.height);
-        //paintBGGrid(grid_xi,grid_yi,null);
-        ctx.clearRect(0,0,canvas.width,canvas.height);
+        isMouseDown = false;
+        bgClear();
         BGGridManager.paint();
         UserInterface.obtainUp(e);
     });
 }
 
-function dlog(str){
-    if(debug){
-        alert(str);
-    }
+function bgClear(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 }
+
+function moveBG(offsetx,offsety){
+    BGGridManager.xoffset = offsetx;
+    BGGridManager.yoffset = offsety;
+}
+
+function zoomIn(){
+    _maplength += 5;
+    initGame();
+}
+
+function zoomOut(){
+    _maplength -= 5;
+    initGame();
+}
+
+
