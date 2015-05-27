@@ -11,7 +11,7 @@ BGGridManager.row_count = 3;
 BGGridManager.column_count = 4;
 BGGridManager.xoffset = 0;
 BGGridManager.yoffset = 0;
-BGGridManager.strokeStyle = 'rgba(233,233,233,0.5)';
+BGGridManager.strokeStyle = 'rgba(133,133,133,1)';
 
 BGGridManager.paintItem = function(itemindex,strokeStyle,length){
     if(BGGridManager.data){
@@ -60,10 +60,10 @@ BGGridManager.paint = function(bggridObj,row_max,column_max,length,xoffset,yoffs
         BGGridManager.data.
             y_max_length = BGGridManager.data[BGGridManager.row_count - 1][BGGridManager.column_count - 1][4].y;
 
-        dlog('row_length:' + BGGridManager.data.length +
+        Logger.log('row_length:' + BGGridManager.data.length +
         '\ncolumn_length:' + BGGridManager.data[0].length +
         '\nx_max_length:' + BGGridManager.data.x_max_length +
-        '\ny_max_length:' + BGGridManager.data.y_max_length);
+        '\ny_max_length:' + BGGridManager.data.y_max_length,'bggrid');
     }
 
     //插入列元素
@@ -83,12 +83,12 @@ BGGridManager.paint = function(bggridObj,row_max,column_max,length,xoffset,yoffs
             var num_total = indexTransfer(row,column,BGGridManager.column_count) + 1;
             RenderProxy.rePaint(mask_ctx,numberToColor(num_total));
 
-            dlog("count:"+rowArray.length+
+            Logger.log("count:"+rowArray.length+
                 "\nindex:"+index+
                 "\nrow:"+row+
                 "\nrow_max:"+BGGridManager.row_count+
                 "\ncolumn:"+column+
-                "\ncolumn_max:"+BGGridManager.column_count
+                "\ncolumn_max:"+BGGridManager.column_count,'bggrid'
             );
         }
     }

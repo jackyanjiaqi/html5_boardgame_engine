@@ -15,7 +15,7 @@ var grid_xi,grid_yi;
 window.onload = init;
 
 function init(){
-    dlog("init");
+    Logger.log('init','main');
     canvas = document.getElementById("mainCanvas");
     ctx = canvas.getContext("2d");
     //初始化
@@ -23,6 +23,7 @@ function init(){
     //游戏循环
     gameLoop();
 }
+
 function initFullScreenCanvas(canvas){
     resizeCanvas(canvas);
     window.addEventListener("resize",function(){
@@ -30,7 +31,7 @@ function initFullScreenCanvas(canvas){
     });
 }
 function resizeCanvas(canvas){
-    dlog('resizeCanvas');
+    Logger.log('resizeCanvas','main');
     canvas.width = document.width || document.body.clientWidth;
     canvas.height = document.height || document.body.clientHeight;
     ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -41,15 +42,16 @@ function resizeCanvas(canvas){
     mask_ctx = mask_canvas.getContext('2d');
     mask_ctx.clearRect(0,0,mask_canvas.width,mask_canvas.height);
 
-    //grid_xi = Math.ceil(canvas.width/(_maplength*Math.tan(Math.PI/3)));
-    //grid_yi = Math.ceil(canvas.height/(_maplength*Math.tan(Math.PI/3)));
-    //img = document.createElement('IMG');
-    //img.onload = function() {
-    //    initGame(grid_xi,grid_yi);
-    //}
-    //img.src='img/grass_land.jpg';
+    grid_xi = Math.ceil(canvas.width/(_maplength*Math.tan(Math.PI/3)));
+    grid_yi = Math.ceil(canvas.height/(_maplength*Math.tan(Math.PI/3)));
+    img = document.createElement('IMG');
+    img.onload = function() {
+        initGame(grid_xi,grid_yi);
+    }
+    img.src='img/grass_land.jpg';
 
-    createRandomIndicators();
+    //测试Indicator
+    //createRandomIndicators();
 }
 
 function createRandomIndicators(){
@@ -57,7 +59,7 @@ function createRandomIndicators(){
         ctx.fillStyle = 'rgb(255,0,0)';
         ctx.fillRect(e.rawX,e.rawY,400,400);
     });
-    dlog(mainTest.toString());
+    Logger.log(mainTest.toString(),'test');
     for(var i = 0;i<4;i++){
         var child = new Indicator(function(e){
             ctx.fillStyle = 'rgb(0,0,255)';
@@ -66,15 +68,16 @@ function createRandomIndicators(){
         child.x = i*60 + 20;
         child.y = 20;
         mainTest.addChild(child);
-        dlog(child.toString());
+        Logger.log(child.toString(),'test');
     }
     IndicatorManager.setCanvas(canvas).addIndicator(mainTest);
+    Logger.tagAll();
 }
 
 function initGame(){
-    dlog('initGame');
-    bggridObj = [];
-    BGGridManager.paint(bggridObj,arguments[1],arguments[0],_maplength);
+    Logger.log('initGame','main');
+    //bggridObj = [];
+    //BGGridManager.paint(bggridObj,arguments[1],arguments[0],_maplength);
     createRandomIndicators();
     //BGGridManager.xoffset = Math.round(canvas.width/2) - bggridObj.cx;
     //BGGridManager.yoffset = Math.round(canvas.height/2) - bggridObj.cy;
@@ -105,40 +108,44 @@ function initGame(){
     //)
 }
 
-
 var isMouseDown = false;
 var init_x = 0;
 var init_y = 0;
 
 function gameLoop(){
     canvas.addEventListener('mousemove',function(e){
-        var indicator = IndicatorManager.indicators[0];
-        indicator.x = e.x;
-        indicator.y = e.y;
-        bgClear();
-        indicator.paint();
-        //if(isMouseDown){
-        //    moveBG(e.x - init_x,e.y - init_y);
-        //    bgClear();
-        //    initGame();
-        //}else{
-        //    bgClear();
-        //    BGGridManager.paint();
-        //    UserInterface.obtainMove(e);
-        //}
+        if(isMouseDown){
+            moveBG(e.x - init_x,e.y - init_y);
+            bgClear();
+            initGame();
+        }else{
+            bgClear();
+            //BGGridManager.paint();
+            //UserInterface.obtainMove(e);
+            if(IndicatorManager.indicators.length!=0){
+                var indicator = IndicatorManager.indicators[0];
+                indicator.x = e.x;
+                indicator.y = e.y;
+                indicator.paint();
+            }
+        }
     });
     canvas.addEventListener('mousedown',function (e){
         isMouseDown = true;
         init_x = e.x;
         init_y = e.y;
-        UserInterface.obtainUp()
+
+        IndicatorManager.indicators[0].vision = Indicator.VISION_INVISIBLE;
+        //UserInterface.obtainUp()
     });
 
     canvas.addEventListener('mouseup',function (e){
         isMouseDown = false;
         bgClear();
-        BGGridManager.paint();
-        UserInterface.obtainUp(e);
+        IndicatorManager.indicators[0].vision = Indicator.VISION_VISIBLE;
+
+        //BGGridManager.paint();
+        //UserInterface.obtainUp(e);
     });
 }
 

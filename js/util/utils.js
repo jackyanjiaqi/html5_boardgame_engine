@@ -23,12 +23,6 @@ function isTouchDevice() {
     return ('ontouchstart' in document.documentElement);
 }
 
-function dlog(str){
-    if(debug){
-        alert(str);
-    }
-}
-
 function indexTransfer() {
     if(arguments.length == 3) {
         var rowi = arguments[0];
