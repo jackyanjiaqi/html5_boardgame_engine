@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="beta_h5bg_engine" uploadOnCheckin="1c8dff9c-2ab5-459d-b07a-b2f053f7f3e8">
+    <serverData>
+      <paths name="beta_h5bg_engine">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/H5BG_ENGINE" local="$PROJECT_DIR$" web="beta/H5BG_ENGINE" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myUploadOnCheckinName" value="beta_h5bg_engine" />
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>

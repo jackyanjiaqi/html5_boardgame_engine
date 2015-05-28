@@ -76,8 +76,8 @@ function createRandomIndicators(){
 
 function initGame(){
     Logger.log('initGame','main');
-    //bggridObj = [];
-    //BGGridManager.paint(bggridObj,arguments[1],arguments[0],_maplength);
+    bggridObj = [];
+    BGGridManager.paint(bggridObj,arguments[1],arguments[0],_maplength);
     createRandomIndicators();
     //BGGridManager.xoffset = Math.round(canvas.width/2) - bggridObj.cx;
     //BGGridManager.yoffset = Math.round(canvas.height/2) - bggridObj.cy;
@@ -120,7 +120,7 @@ function gameLoop(){
             initGame();
         }else{
             bgClear();
-            //BGGridManager.paint();
+            BGGridManager.paint();
             //UserInterface.obtainMove(e);
             if(IndicatorManager.indicators.length!=0){
                 var indicator = IndicatorManager.indicators[0];
@@ -142,9 +142,8 @@ function gameLoop(){
     canvas.addEventListener('mouseup',function (e){
         isMouseDown = false;
         bgClear();
+        BGGridManager.paint();
         IndicatorManager.indicators[0].vision = Indicator.VISION_VISIBLE;
-
-        //BGGridManager.paint();
         //UserInterface.obtainUp(e);
     });
 }
